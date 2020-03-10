@@ -1,0 +1,4 @@
+<label title="{{$parent.label}}" ng-class="{'required': $parent.mandatory}">
+    {{$parent.label}}
+</label>
+<input class="form-control" type="text" maxlength="{{$parent.config.maxChar}}" ng-required="{{$parent.mandatory}}">

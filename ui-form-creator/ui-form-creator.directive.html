@@ -1,0 +1,152 @@
+<!----- VIEWER MODE ----->
+<div ng-if="vm.isViewerMode">
+    <div class="row">
+        <div class="mb-10 col-md-{{field.config.size}}" ng-repeat="field in vm.fields">
+            <pes-form-field pattern="field.pattern" model="field.variavel" label="field.label" config="field.config"
+                mandatory="field.mandatory"></pes-form-field>
+        </div>
+    </div>
+</div>
+
+<!----- CREATOR MODE ----->
+<div ng-if="!vm.isViewerMode">
+    <div class="row">
+        <div class="col-md-12">
+            <pes-card gray>
+                <label class="required">Nome do formulário</label>
+                <input class="form-control" type="text" ng-required="true">
+            </pes-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-add btn-success btn-sm" ng-click="vm.addField()">Campo</button>
+        </div>
+    </div>
+    <div class="row center-y bottom" style="min-height: 50vh;" ng-if="vm.fields.length == 0">
+        <div class="col-md-12">
+            <div class="bth-empty bth-empty--records bth-empty--sm pb-0">
+                <h4>
+                    Ainda não há campos por aqui. <a href ng-click="vm.addField()">Adicionar</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="min-height: 50vh;" ng-if="vm.fields.length >= 1">
+        <div class="col-md-9">
+            <div gridster="vm.gridOptions" style="height: 60px">
+                <ul>
+                    <li gridster-item ng-repeat="field in vm.fields" ng-class="{'selected': vm.selectedField == field}"
+                        ng-mousedown="vm.setField(field)">
+                        <a href class="btn-remove tx__gray--d20" ng-show="vm.selectedField == field"
+                            ng-click="vm.removeField($index)">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                        <pes-form-field pattern="field.pattern" model="field.variavel" label="field.label"
+                            config="field.config" mandatory="field.mandatory"></pes-form-field>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-3" ng-show="vm.selectedField != null">
+            <pes-card title="Configuração do campo" bordered>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="required">Nome</label>
+                        <input type="text" id="fieldName" class="form-control" ng-model="vm.selectedField.label">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="required">Tipo do campo</label>
+                        <select ng-model="vm.selectedField.pattern" ng-init="vm.pattern = 'TEXT'"
+                            ng-change="vm.getPattern(vm.selectedField.pattern)" bf-select2="{}" class="form-control">
+                            <option value="TEXT">Texto</option>
+                            <option value="VALUE">Valor</option>
+                            <option value="DATE">Data</option>
+                            <option value="SELECT_UNIQUE">Lista de seleção única</option>
+                            <option value="SELECT_MULTIPLE">Lista de seleção múltipla</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" ng-if="vm.selectedField.pattern == 'DATE'">
+                    <div class="col-md-12">
+                        <label class="required">Tipo do campo</label>
+                        <select ng-model="vm.selectedField.config.format" ng-init="vm.config.format = 'dd/mm/yy'"
+                            bf-select2="{}" class="form-control">
+                            <option value="dd/mm/yy">dd/mm/aaaa</option>
+                            <option value="dd/mm">dd/mm</option>
+                            <option value="mm/yy">mm/aaaa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" ng-if="vm.selectedField.pattern == 'VALUE'">
+                    <div class="col-md-12">
+                        <label class="required">Unidade</label>
+                        <input type="text" class="form-control" ng-model="vm.selectedField.config.unit">
+                    </div>
+                </div>
+                <div class="row" ng-if="vm.selectedField.pattern == 'TEXT'">
+                    <div class="col-md-12">
+                        <label class="required">Limite de caracteres</label>
+                        <ui-spinner ng-model="vm.selectedField.config.maxChar"></ui-spinner>
+                    </div>
+                </div>
+                <div class="row bottom"
+                    ng-if="vm.selectedField.pattern == 'SELECT_UNIQUE' || vm.selectedField.pattern == 'SELECT_MULTIPLE'">
+                    <div class="col-md-12">
+                        <label class="required">Opções de seleção</label>
+                        <table class="table table-unstriped">
+                            <thead>
+                                <tr>
+                                    <th width="30"><a href>#</a></th>
+                                    <th><a href>Descrição</a></th>
+                                    <th><a href>Valor</a></th>
+                                    <th width="30"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in vm.selectedField.config.values">
+                                    <td>
+                                        {{$index + 1}}
+                                    </td>
+                                    <td class="has-edit">
+                                        <input type="text" class="form-control" ng-model="item.descricao">
+                                    </td>
+                                    <td class="has-edit">
+                                        <input type="text" class="form-control" ng-model="item.valor">
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-xs btn-link" ng-click="vm.removeOptions($index)">
+                                            <i class="fa fa-trash-o"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row"
+                    ng-if="vm.selectedField.pattern == 'SELECT_UNIQUE' || vm.selectedField.pattern == 'SELECT_MULTIPLE'">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-xs btn-add btn-success" ng-click="vm.addOptions()">Opção</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="required">Variável</label>
+                        <input type="text" class="form-control" ng-model="vm.selectedField.variavel">
+                    </div>
+                </div>
+                <div class="row bottom">
+                    <div class="col-md-12">
+                        <div class="bth-switch">
+                            <input id="setObrigatorio" type="checkbox" ng-model="vm.selectedField.mandatory">
+                            <label for="setObrigatorio">Preenchimento obrigatório</label>
+                        </div>
+                    </div>
+                </div>
+            </pes-card>
+        </div>
+    </div>
+</div> 

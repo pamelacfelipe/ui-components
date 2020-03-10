@@ -1,0 +1,108 @@
+<div class="row" ng-if="vm.hasFiltro">
+    <div class="col-md-12 text-right">
+        <div class="btn-group" uib-dropdown auto-close="outsideClick">
+            <button class="btn btn-link btn-sm" uib-dropdown-toggle>
+                <i class="fa fa-fw fa-sliders"></i> Filtrar
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" style="width: 235px;" uib-dropdown-menu>
+                <li class="dropdown-header">Visualizar</li>
+                <li class="pl-15 pr-15 pt-5">
+                    <div class="bth-radio">
+                        <input id="default" type="radio" ng-model="vm.filtrar" ng-value="false">
+                        <label for="default">Todas as informações</label>
+                    </div>
+                </li>
+                <li class="pl-15 pr-15 pt-5 pb-5">
+                    <div class="bth-radio">
+                        <input id="only-altered" type="radio" ng-model="vm.filtrar" ng-value="true">
+                        <label for="only-altered">Informações com alteração</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="ui-diff" drag-scroll="true" axis="x">
+    <div class="ui-diff__item">
+        <div class="ui-diff__date">
+            <span class="badge badge-primary">Atual: {{vm.historicoAtual.inicioVigencia|bfMaskDate}}</span>
+        </div>
+        <div class="ui-diff__content">
+            <table class="table table-unstriped">
+                <thead>
+                    <tr>
+                        <th class="text-right">
+                            <div class="btn-group" uib-dropdown>
+                                <button class="btn btn-xs btn-link" title="Abre a lista de ações disponíveis" uib-dropdown-toggle>
+                                    <i class="material-icons">more_vert</i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
+                                    <li class="dropdown-header">Ações disponíveis</li>
+                                    <li>
+                                        <a href ng-click="vm.acao(vm.historicoAtual)"><i class="fa fa-pencil"></i> Editar</a>
+                                    </li>
+                                    <li>
+                                        <a href><i class="fa fa-arrow-left"></i> Criar histórico posterior</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, value) in vm.historicoAtual.data" ng-class="{'bg__blue--l40 tx__blue': vm.historicoAtual.changes[key]}">
+                        <td ng-mouseover="showEdit = true" ng-mouseleave="showEdit = false"> 
+                            {{vm.labels[key]}}:
+                            <span ng-if="key == 'rendimentoMensal'">R${{value|currency: ''}}</span>
+                            <span ng-if="key != 'rendimentoMensal'">{{value|pesHistoricoDisplayData}}</span>
+                            <a href title="Editar histórico" ng-click="vm.acao(vm.historicoAtual)" ng-show="showEdit">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="ui-diff__item" ng-repeat="historico in vm.historicos">
+        <div class="ui-diff__date">
+            <span class="badge badge-default">{{historico.inicioVigencia|bfMaskDate}}</span>
+        </div>
+        <div class="ui-diff__content">
+            <table class="table table-unstriped">
+                <thead>
+                    <tr>
+                        <th width="35" class="text-right">
+                            <div class="btn-group" uib-dropdown>
+                                <button class="btn btn-xs btn-link" title="Abre a lista de ações disponíveis" uib-dropdown-toggle>
+                                    <i class="material-icons">more_vert</i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
+                                    <li class="dropdown-header">Ações disponíveis</li>
+                                    <li>
+                                        <a href ng-click="vm.acao(historico)"><i class="fa fa-pencil"></i> Editar histórico</a>
+                                    </li>
+                                    <li>
+                                        <a href><i class="fa fa-arrow-left"></i> Criar histórico posterior</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, value) in historico.data" ng-class="{'bg__blue--l40 tx__blue': historico.changes[key]}">
+                        <td ng-mouseover="showEdit = true" ng-mouseleave="showEdit = false">
+                            {{vm.labels[key]}}:
+                            <span ng-if="key == 'rendimentoMensal'">R${{value|currency: ''}}</span>
+                            <span ng-if="key != 'rendimentoMensal'">{{value|pesHistoricoDisplayData}}</span>
+                            <a href title="Editar histórico" ng-click="vm.acao(historico)" ng-show="showEdit">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

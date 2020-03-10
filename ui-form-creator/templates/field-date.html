@@ -1,0 +1,7 @@
+<label title="{{$parent.label}}" ng-class="{'required': $parent.mandatory}">
+    {{$parent.label}}
+</label>
+<div class="input-group">
+    <input type="text" class="form-control" ng-model="$parent.model"
+        bf-date="{showDate: true, dateFormat: $parent.config.format}" ng-required="{{$parent.mandatory}}">
+</div>

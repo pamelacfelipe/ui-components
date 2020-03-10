@@ -1,0 +1,48 @@
+$root: '.ui-diff';
+
+#{$root} {
+  align-items: flex-start;
+  cursor: grab;
+  display: flex;
+  height: 65vh;
+  overflow: auto;
+
+  &__item {
+    flex: 0 0 auto;
+    margin-left: 15px;
+    width: 33.3%;
+
+    &:only-child {
+      flex: 0 0 33.3%;
+    }
+
+    &:first-child:not(:only-child) {
+      flex: 1 0 33.3%;
+      left: 0;
+      margin-left: 0;
+      position: sticky;
+      z-index: 11;
+    }
+  }
+
+  &__date {
+    background-color: #FFF;
+    padding: 5px 0 10px;
+    position: sticky;
+    text-align: center;
+    top: 0;
+    width: 100%;
+
+    > .badge {
+      font-size: 13px;
+    }
+  }
+
+  &__content {
+    min-height: 70px;
+
+    > .table {
+      margin: 0;
+    }
+  }
+}

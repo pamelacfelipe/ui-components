@@ -1,0 +1,9 @@
+<label title="{{$parent.label}}" ng-class="{'required': $parent.mandatory}">
+    {{$parent.label}}
+</label>
+<div class="mt-5">
+    <div class="bth-checkbox bth-checkbox-inline" ng-repeat="item in $parent.config.values">
+        <input id="option-{{item.descricao}}" type="checkbox" ng-model="item.valor">
+        <label for="option-{{item.descricao}}">{{item.descricao}}</label>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<label title="{{$parent.label}}" ng-class="{'required': $parent.mandatory}">
+    {{$parent.label}}
+</label>
+<div ng-class="{'input-group': $parent.config.unit}">
+    <input class="form-control" type="text" ng-required="{{$parent.mandatory}}">
+    <span class="input-group-addon" ng-if="$parent.config.unit" ng-bind="$parent.config.unit"></span>
+</div>
