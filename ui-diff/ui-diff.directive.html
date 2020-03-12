@@ -1,31 +1,7 @@
-<div class="row" ng-if="vm.hasFiltro">
-    <div class="col-md-12 text-right">
-        <div class="btn-group" uib-dropdown auto-close="outsideClick">
-            <button class="btn btn-link btn-sm" uib-dropdown-toggle>
-                <i class="fa fa-fw fa-sliders"></i> Filtrar
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" style="width: 235px;" uib-dropdown-menu>
-                <li class="dropdown-header">Visualizar</li>
-                <li class="pl-15 pr-15 pt-5">
-                    <div class="bth-radio">
-                        <input id="default" type="radio" ng-model="vm.filtrar" ng-value="false">
-                        <label for="default">Todas as informações</label>
-                    </div>
-                </li>
-                <li class="pl-15 pr-15 pt-5 pb-5">
-                    <div class="bth-radio">
-                        <input id="only-altered" type="radio" ng-model="vm.filtrar" ng-value="true">
-                        <label for="only-altered">Informações com alteração</label>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
 <div class="ui-diff" drag-scroll="true" axis="x">
     <div class="ui-diff__item">
         <div class="ui-diff__date">
-            <span class="badge badge-primary">Atual: {{vm.historicoAtual.inicioVigencia|bfMaskDate}}</span>
+            <span class="badge badge-primary">Today: {{vm.today.date}}</span>
         </div>
         <div class="ui-diff__content">
             <table class="table table-unstriped">
@@ -33,16 +9,13 @@
                     <tr>
                         <th class="text-right">
                             <div class="btn-group" uib-dropdown>
-                                <button class="btn btn-xs btn-link" title="Abre a lista de ações disponíveis" uib-dropdown-toggle>
+                                <button class="btn btn-xs btn-link" title="Open list of possible action" uib-dropdown-toggle>
                                     <i class="material-icons">more_vert</i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
-                                    <li class="dropdown-header">Ações disponíveis</li>
+                                    <li class="dropdown-header">Actions</li>
                                     <li>
-                                        <a href ng-click="vm.acao(vm.historicoAtual)"><i class="fa fa-pencil"></i> Editar</a>
-                                    </li>
-                                    <li>
-                                        <a href><i class="fa fa-arrow-left"></i> Criar histórico posterior</a>
+                                        <a href ng-click="vm.action(vm.today)"><i class="fa fa-pencil"></i> Edit history</a>
                                     </li>
                                 </ul>
                             </div>
@@ -50,12 +23,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="(key, value) in vm.historicoAtual.data" ng-class="{'bg__blue--l40 tx__blue': vm.historicoAtual.changes[key]}">
-                        <td ng-mouseover="showEdit = true" ng-mouseleave="showEdit = false"> 
-                            {{vm.labels[key]}}:
-                            <span ng-if="key == 'rendimentoMensal'">R${{value|currency: ''}}</span>
-                            <span ng-if="key != 'rendimentoMensal'">{{value|pesHistoricoDisplayData}}</span>
-                            <a href title="Editar histórico" ng-click="vm.acao(vm.historicoAtual)" ng-show="showEdit">
+                    <tr ng-repeat="(key, value) in vm.today.data" ng-class="{'active': vm.today.changes[key]}">
+                        <td ng-mouseover="editOption = true" ng-mouseleave="editOption = false"> 
+                            {{vm.labels[key]}}: {{value}}
+                            <a href title="Edit history" ng-click="vm.action(vm.today)" ng-show="editOption">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </td>
@@ -64,9 +35,9 @@
             </table>
         </div>
     </div>
-    <div class="ui-diff__item" ng-repeat="historico in vm.historicos">
+    <div class="ui-diff__item" ng-repeat="history in vm.histories">
         <div class="ui-diff__date">
-            <span class="badge badge-default">{{historico.inicioVigencia|bfMaskDate}}</span>
+            <span class="badge badge-default">{{history.date}}</span>
         </div>
         <div class="ui-diff__content">
             <table class="table table-unstriped">
@@ -74,16 +45,13 @@
                     <tr>
                         <th width="35" class="text-right">
                             <div class="btn-group" uib-dropdown>
-                                <button class="btn btn-xs btn-link" title="Abre a lista de ações disponíveis" uib-dropdown-toggle>
+                                <button class="btn btn-xs btn-link" title="Open list of possible action" uib-dropdown-toggle>
                                     <i class="material-icons">more_vert</i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
-                                    <li class="dropdown-header">Ações disponíveis</li>
+                                    <li class="dropdown-header">Actions</li>
                                     <li>
-                                        <a href ng-click="vm.acao(historico)"><i class="fa fa-pencil"></i> Editar histórico</a>
-                                    </li>
-                                    <li>
-                                        <a href><i class="fa fa-arrow-left"></i> Criar histórico posterior</a>
+                                        <a href ng-click="vm.action(history)"><i class="fa fa-pencil"></i> Edit history</a>
                                     </li>
                                 </ul>
                             </div>
@@ -91,12 +59,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="(key, value) in historico.data" ng-class="{'bg__blue--l40 tx__blue': historico.changes[key]}">
-                        <td ng-mouseover="showEdit = true" ng-mouseleave="showEdit = false">
-                            {{vm.labels[key]}}:
-                            <span ng-if="key == 'rendimentoMensal'">R${{value|currency: ''}}</span>
-                            <span ng-if="key != 'rendimentoMensal'">{{value|pesHistoricoDisplayData}}</span>
-                            <a href title="Editar histórico" ng-click="vm.acao(historico)" ng-show="showEdit">
+                    <tr ng-repeat="(key, value) in history.data" ng-class="{'active': history.changes[key]}">
+                        <td ng-mouseover="editOption = true" ng-mouseleave="editOption = false">
+                            {{vm.labels[key]}}: {{value}}
+                            <a href title="Edit history" ng-click="vm.action(history)" ng-show="editOption">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </td>

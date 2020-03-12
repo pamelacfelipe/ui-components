@@ -8,11 +8,10 @@ function uiDiffDirective() {
         restrict: 'E',
         template: require('./ui-diff.directive.html'),
         scope: {
-            hasFiltro: '=',
-            acao: '=',
+            action: '=',
             labels: '=',
-            historicoAtual: '=',
-            historicos: '='
+            today: '=',
+            histories: '='
         },
         bindToController: true,
         controller: uiDiffController,

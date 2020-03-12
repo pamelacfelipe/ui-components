@@ -1,6 +1,6 @@
 # ui-components
 
-Components for study/work purpose.
+Playgroung for creating ui-components in `AngularJS @1.4` for study/work purpose.
 
 ## ui-form-creator
 
@@ -8,7 +8,12 @@ Components for study/work purpose.
 <ui-form-creator ng-model="vm.form" view-mode></ui-form-creator>
 ```
 
-**Field format**
+**Params**
+
+* `ng-model`: Model for form.
+* `view-mode`: Attribute for show form created. Default: `true`.
+
+**Supported field format**
 
 * Text (default) 
 * Datetime
@@ -20,11 +25,20 @@ Components for study/work purpose.
 
 ["angular-gridster": "^0.13.14"](https://github.com/ManifestWebDesign/angular-gridster)
 
+------------
+
 ## ui-diff
 
 ```html
-<ui-diff labels="vm.labels" historico-atual="vm.historicoAtual" historicos="vm.historicos" acao="vm.editarHistorico"></ui-diff>
+<ui-diff labels="vm.labels" today="vm.today" histories="vm.histories" action="vm.edit"></ui-diff>
 ```
+
+**Params**
+
+* `labels`: Show label of each historical field.
+* `today`: Today history.
+* `histories`: All histories.
+* `action`: Action for each history.
 
 **Dependencies**
 
